@@ -1,0 +1,2 @@
+[console_scripts]
+tetss2 = tetss2.cli:main

@@ -1,0 +1,2 @@
+recursive-include src/tetss2/assets *.pth
+include README.md

@@ -1,0 +1,14 @@
+MANIFEST.in
+README.md
+pyproject.toml
+src/tetss2/__init__.py
+src/tetss2/cli.py
+src/tetss2/model.py
+src/tetss2/predictor.py
+src/tetss2.egg-info/PKG-INFO
+src/tetss2.egg-info/SOURCES.txt
+src/tetss2.egg-info/dependency_links.txt
+src/tetss2.egg-info/entry_points.txt
+src/tetss2.egg-info/requires.txt
+src/tetss2.egg-info/top_level.txt
+src/tetss2/assets/best_model.pth

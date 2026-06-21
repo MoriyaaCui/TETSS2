@@ -1,0 +1,24 @@
+{
+  "mode": "scapture_augmented",
+  "master_tsv": "/home/cuimy/TETSS_RAMPAGE/data/master_dataset_augmented/master_dataset_augmented_201bp.tsv",
+  "seed": 42,
+  "val_frac": 0.1,
+  "threshold": 0.5,
+  "batch_size": 256,
+  "epochs": 30,
+  "lr": 0.001,
+  "weight_decay": 1e-05,
+  "model_selection_metric": "val_auroc",
+  "final_val_metrics": {
+    "loss": 0.16489052737664028,
+    "auroc": 0.9895568370155781,
+    "auprc": 0.9869550258030362,
+    "accuracy": 0.9577292277893298,
+    "precision": 0.951531329025007,
+    "recall": 0.964594964110744,
+    "tn": 33381,
+    "fp": 1725,
+    "fn": 1243,
+    "tp": 33865
+  }
+}
