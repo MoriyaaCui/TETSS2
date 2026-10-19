@@ -1,38 +1,77 @@
-# TETSS2.0
+# TETSS2
 
-TETSS2.0 is a deep learning model for predicting TE-derived transcription start site (TE-TSS) activity from DNA sequences. 
+TETSS2 is an integrated resource of human transposable element-derived
+transcription start sites (TE-TSSs), combining RAMPAGE-derived evidence,
+human records from TE-TSS1.0, and candidates obtained by processing
+5′ single-cell RNA-sequencing data.
 
-The Python package and command-line tool are named `tetss2`. The model name used in documents, figures, and the upcoming web server is **TETSS2.0**.
+This repository contains the `tetss2` sequence-prediction toolkit and scripts
+for preparing model-development datasets and training sequence models.
+The model is referred to as **TETSS2.0** in the predictor interface; the Python
+package and command-line program are named **`tetss2`**.
 
-## Overview
+## Repository contents
 
-TETSS2.0 is a PyTorch-based 1D-Convolutional Neural Network classifier designed to predict whether an input DNA sequence is associated with TE-TSS activity. 
+| Location | Purpose |
+| --- | --- |
+| `src/tetss2/` | Model architecture, sequence encoding, Python predictor and CLI |
+| `src/tetss2/assets/best_model.pth` | Pretrained model parameters bundled with the predictor |
+| `scripts/` | Data preparation and model-training scripts |
+| `environment.yml` | Environment specification |
+| `pyproject.toml` and `MANIFEST.in` | Package installation and model-resource packaging |
+| `run_config.json` and `final_val_metrics.json` | Available training configuration and validation metrics |
+| `test_tetss2_length_check.py` | Manual sequence-length checking example |
 
-The model takes a strictly 201 bp DNA sequence as input and returns:
-* A prediction probability score
-* A binary prediction label (0 or 1)
-* The classification threshold used (default: 0.5)
+## Sequence model
 
----
+The predictor uses a PyTorch 1D convolutional neural network to assign a
+sequence-based TE-TSS prioritization score to a strand-oriented 201-bp DNA
+sequence. It returns a score between 0 and 1 and a binary label at a configurable
+threshold (default: 0.5). A sequence-model score is not a direct experimental
+measurement of transcriptional activity.
+
+## Data preparation and training scripts
+
+| Script | Purpose |
+| --- | --- |
+| `scripts/filter_rampage_for_modeling.py` | Filter RAMPAGE records and normalize explicitly specified coordinate conventions |
+| `scripts/generate_position_augmented_dataset.py` | Construct positive/background examples, assign fixed partitions and augment training positives |
+| `scripts/train_sequence_models.py` | Train summit-centered and position-augmented sequence models on the supplied partitions |
+
+Inputs, outputs and configurable arguments are shown by each script's help:
+
+```bash
+python scripts/filter_rampage_for_modeling.py --help
+python scripts/generate_position_augmented_dataset.py --help
+python scripts/train_sequence_models.py --help
+```
+
+For these development scripts, install the additional dependencies:
+
+```bash
+python -m pip install numpy pandas scikit-learn pyfaidx
+```
+
+The predictor can be used independently of the development scripts.
 
 ## Installation (Recommended)
 
 To avoid dependency conflicts and bypass massive GPU driver downloads for standard prediction tasks, we highly recommend installing `tetss2` in a clean Conda environment with a CPU-only version of PyTorch.
 
-**1. Create a clean environment (Python 3.10+ recommended):**
+**1. Create a clean environment (Python 3.10 or later):**
 ```bash
-conda create -n tetss2_env python=3.10 -y
+conda create -n tetss2_env python=3.11 pip -y
 conda activate tetss2_env
 ```
 
 **2. Install a lightweight, CPU-only PyTorch:**
 ```bash
-pip install torch torchvision --index-url [https://download.pytorch.org/whl/cpu](https://download.pytorch.org/whl/cpu)
+python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
 ```
 
 **3. Install TETSS2 directly from GitHub:**
 ```bash
-pip install git+[https://github.com/MoriyaaCui/TETSS2.git](https://github.com/MoriyaaCui/TETSS2.git)
+python -m pip install git+https://github.com/MoriyaaCui/TETSS2.git
 ```
 
 ---
@@ -56,17 +95,9 @@ Use the `predict` mode for a quick evaluation of a 201 bp sequence:
 ```bash
 tetss2 predict --sequence ATGCTCTGTGAGGCCGTGCTTGGCCGAGTCAGGAAGGGCCCCACGCGTGCCGTAGGCCGTAGGTAGGCGGGTAGGCGAGTGGCGGAGGCCCAGGGCCTGCCAGCTGGGTAGGCGAGGGCGGCGGGAGGCCTGGGGCCTGCGCGTGCGGCGGAGGCCTGGAGCCTGCCAGCTGGGCGGGCGAGGGCGGCGGGAGGCCTGGGG
 ```
-**Example Output:**
-```json
-{
-  "model": "TETSS2.0",
-  "sequence": "ATGCTCTGTGAGGCCGTGCTT...",
-  "sequence_length": 201,
-  "probability": 0.0044,
-  "prediction": 0,
-  "threshold": 0.5
-}
-```
+The JSON output contains `model`, `sequence`, `sequence_length`,
+`probability`, `prediction`, and `threshold`. The score depends on the input
+sequence and checkpoint; the default positive label uses score > 0.5.
 
 ### 2. High-Throughput Batch Prediction
 Use the `predict-file` mode for large-scale screenings from TSV or CSV files. The input file must contain a column named `sequence` (or specify the column name with `--sequence-column`).
@@ -111,13 +142,8 @@ print(result)
 
 ---
 
-## Citation & Contact
+## Citation and contact
 
-If you use TETSS2 in your research, please cite:
-```bibtex
-@software{tetss2, 
-  title={TETSS2: Deep Learning Model for TE-TSS Prediction}, 
-  year={2026} 
-}
-```
-For questions or issues, please open an issue in the project repository.
+Manuscript citation and permanent archive identifiers will be added when
+available. For questions about the code, please open an issue in this repository.
+
