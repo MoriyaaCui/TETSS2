@@ -1,6 +1,6 @@
 {
   "mode": "scapture_augmented",
-  "master_tsv": "/home/cuimy/TETSS_RAMPAGE/data/master_dataset_augmented/master_dataset_augmented_201bp.tsv",
+  "master_tsv": "master_dataset_augmented_201bp.tsv",
   "seed": 42,
   "val_frac": 0.1,
   "threshold": 0.5,
